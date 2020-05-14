@@ -1,5 +1,7 @@
 # MinimumLaTeX
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 本项目旨在提供一个尽可能简单的模式，使一个没有开发经验的同学能够快速达到能够使用 `LaTeX + Git` 进行工作和协作的程度。
 
 ## 目的和动机
