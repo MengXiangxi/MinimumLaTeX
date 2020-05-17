@@ -21,16 +21,17 @@
 
 ## 计划
 
-- 环境的配置
-  - 软件下载与安装
-  - VSCode 功能和插件介绍
-- LaTeX 初步
-  - LaTeX 基本概念与设定
-  - 中文示例文档
-  - 参考文献的插入
-- GitHub 的使用
-  - GitHub 基本操作
-  - GitHub 的权限管理
+* 环境的配置
+  * 软件下载与安装
+  * VSCode 功能和插件介绍
+* LaTeX 初步
+  * LaTeX 基本概念与设定
+  * LaTeX 的编辑进阶
+  * 参考文献的插入
+* GitHub 的使用
+  * GitHub 基本操作
+  * GitHub 的权限管理
+  * GitHub Markdown
   
 ## 环境的配置
 
@@ -46,6 +47,7 @@
 * VSCode 的基本界面及其功能，编辑区、侧边栏、Terminal。
 * Preference、User Settings。
 * 用 VSCode 写 Markdown，使用 `Markdown All in One` 插件。
+
 ```markdown
 # Title
 
@@ -57,8 +59,8 @@ This is the text
 | --- | --- |
 | 000 | 111 |
 
-
 ```
+
 * 尝试用 VSCode 编译 python，使用 `python` 插件。
 
 ```python
@@ -72,10 +74,140 @@ print(os.getcwd())
 
 ### LaTeX 基本概念与设定
 
-* LaTeX 是干啥的？一种基于命令的排版工具
+* LaTeX 是干啥的？一种基于命令的排版工具。
 * Knuth 创立 TeX，而 LaTeX 是在 TeX 基础上的一个宏集。
 * TeX Live 集成了一堆编译器，把 `.tex` 文件中的代码编译成 PDF 文件。
-* 在 VSCode 中使用 TeXLive，建议用 `LaTeX-Workshop` 插件。
+* 在 VSCode 中使用 TeXLive，建议用 `LaTeX-Workshop` 插件。在 `Preference - User Setting` 中，打开 `settings.json`，修改其中的内容。以下内容供参考。
+
+```json
+    "latex-workshop.latex.tools": [
+        {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args":[
+                "%DOC%"
+            ]
+        },
+        {
+            "name": "dvipdf",
+            "command": "dvipdfmx",
+            "args":[
+                "%DOC%"
+            ],
+        },
+        {
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdf",
+                "%DOC%"
+            ],
+            "name": "latexmk"
+        },
+        {
+            "name":"latex",
+            "command":"latex",
+            "args":[
+                "%DOC%"
+            ]
+        },
+        {
+            "name":"dvips",
+            "command":"dvips",
+            "args":[
+                "%DOCFILE%.dvi"
+            ]
+        },
+        {
+            "name":"ps2pdf",
+            "command":"ps2pdf",
+            "args":[
+                "%DOCFILE%.ps"
+            ]
+        },
+        {
+            "name":"pdf2eps",
+            "command":"pfd2esp",
+            "args":[
+                "1",
+                "%DOC%"
+            ]
+        },
+        {
+            "name":"pdflatex",
+            "command":"pdflatex",
+            "args":[
+                "-synctex=1",
+                "%DOC%"
+            ]
+        },
+        {
+            "name":"bibtex",
+            "command":"bibtex",
+            "args":[
+                "%DOCFILE%"
+            ]
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "pdflatex",
+            "tools":[
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "PSTricks",
+            "tools":[
+                "latex",
+                "dvips",
+                "ps2pdf"
+            ]
+        },
+        {
+            "name": "PKUThesis",
+            "tools": [
+                "xelatex",
+                "biber-pkuthss",
+                "xelatex",
+                "xelatex"
+            ]
+        },
+        {
+            "name": "xelatex-1",
+            "tools": [
+                "xelatex"
+            ]
+        },
+        {
+            "name": "pdflatex-1",
+            "tools": [
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "index-pdflatex",
+            "tools": [
+                "makeindex",
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "index-xelatex",
+            "tools": [
+                "makeindex",
+                "xelatex"
+            ]
+        }
+    ],
+```
+
+* 此时建立一个 `.tex` 文件，可以看到侧边栏有一个 LaTeX 选项卡。我们可以尝试用这些命令来运行下面的 LaTeX 代码。
 
 ```tex
 \documentclass[a4paper,12pt]{article}
@@ -96,7 +228,63 @@ print(os.getcwd())
 
 参考：[使用VSCode编写LaTeX](https://zhuanlan.zhihu.com/p/38178015)
 
-### 中文示例文档
+### LaTeX 的编辑进阶
+
+* LaTeX 代码的组成部分。
+  
+```tex
+% 导言区 preamble
+\documentclass[a4paper,12pt]{article} % 文档类
+
+% 可用 `\usepackage{}` 语句插入宏包
+
+\begin{document} % 正文部分
+    \title{Title}
+    \author{Meng, Xiangxi}
+    \date{}
+    \maketitle % 打印标题
+    
+    \section{The section} % 文档标题结构
+
+    The contents.
+    
+    PDFLaTeX.
+\end{document}
+```
+
+* LaTeX 的编译过程。
+
+* 插入图片。浮动体的概念。
+
+```tex
+\usepackage{graphicx} % preamble
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale = 1]{test.png}
+    \caption{Figure Caption}
+    \label{fig:test}
+\end{figure}
+```
+
+* 插入公式。
+* 插入表格（留作自己探索）。
+
+```tex
+\usepackage{booktabs} % preamble
+
+\begin{table}[htbp] 
+ \caption{\label{tab:test}Test Table} 
+ \begin{tabular}{lcl} 
+  \toprule 
+  Item 1 & Item 2 & Item 3  \\ 
+  \midrule 
+    1    &    2   &    3    \\ 
+    4    &    5   &    6    \\ 
+  \bottomrule 
+ \end{tabular} 
+\end{table}
+```
 
 ### 参考文献的插入
 
